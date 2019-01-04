@@ -12,7 +12,7 @@ class App extends Component {
   }
 
   componentDidMount(){
-    fetch('http://localhost:3001/api/stats/hour')
+    fetch('/api/stats/hour')
       .then((response) => {
         return response.json();
       })
@@ -52,6 +52,7 @@ class App extends Component {
             <br/>
             and {this.state.stats.modifyrelation} relations were modified.
             <br/>
+            <span className="timeStamp"> As of {this.state.stats.timeStamp} </span>
             <br/>
           </div>
 

@@ -4,7 +4,13 @@
 }
 
 .prose{
+  font-style: italic;
   margin-top:5%;
   word-spacing: 3px;
   font-size: 28px;
+}
+
+.timeStamp{
+  font-size: 11px;
+  margin-left: 290px;
 }
