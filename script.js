@@ -6,6 +6,15 @@ const child_process = require('child_process');
 const exec = require('child_process').exec;
 let parser = new xml2js.Parser();
 
+
+function ClearDir(){
+	return new Promise((resolve,reject)=>{
+		exec("rm *.osc && rm *.osc.gz", function(error, stdout, stderr) {
+		  resolve();
+		});
+	})
+}
+
 function ExecCommand(command){
 	return new Promise((resolve,reject)=>{
 		exec(command, function(error, stdout, stderr) {
@@ -60,10 +69,18 @@ function padString(sequenceNumber){
 
 const granularity = "minute";
 const url = `https://planet.openstreetmap.org/replication/${granularity}/state.txt`;
-let zipFileName;
 let unzippedFileName;
 let timeStamp;
-Request(url)
+let stats = {
+	users : [],
+	changesets : []
+};
+
+
+ClearDir()
+.then((cleared)=>{
+	return Request(url);
+})
 .then((response)=>{
 	timeStamp = response.split("=")[0].split("\n")[0].split("#")[1];
 	const sequenceNumber = response.split("=")[1].split("\n")[0];
@@ -85,16 +102,32 @@ Request(url)
 	// 	console.log("done")
 	// });
 	const data = response;
-	let stats = {
-		deletedNode : 0
-	};
-	data.osmChange.delete.forEach((del)=>{
-		console.log(del)
-		stats. deletedNode += 	del.length;
-	});
-
+	
+	const countOn = ['delete','create','modify'];
+	countOn.forEach((on)=>{
+		if(data.osmChange && data.osmChange[on]){
+			data.osmChange[on].forEach((change)=>{
+				for(let element in change){
+					if(!stats[`${on}${element}`]){
+						stats[`${on}${element}`] = change[element].length
+					}else{
+						stats[`${on}${element}`] += change[element].length
+					}
+					if(change[element].length){
+						change[element].forEach((change)=>{
+							if(stats.users.indexOf(change['$'].user) === -1){
+								stats.users.push(change['$'].user);
+							}
+							if(stats.changesets.indexOf(change['$'].changeset) === -1){
+								stats.changesets.push(change['$'].changeset);
+							}
+						})
+					}
+				}
+			});
+		}
+	})
 	console.log(stats)
-
 })
 .catch((err)=>{
 	console.log("err",err)
