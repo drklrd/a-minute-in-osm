@@ -79,7 +79,8 @@ const url = `https://planet.openstreetmap.org/replication/${granularity}/state.t
 let unzippedFileName;
 let stats = {
 	users : [],
-	changesets : []
+	changesets : [],
+	wayBuildings : 0
 };
 
 
@@ -128,6 +129,21 @@ module.exports = new CronJob(cronScheduledAt, ()=> {
 								}
 								if(stats.changesets.indexOf(change['$'].changeset) === -1){
 									stats.changesets.push(change['$'].changeset);
+								}
+								if(element === "way" && on === "create"  && change.tag && change.tag.length){
+									change.tag.forEach((tag)=>{
+										if(tag['$'] && tag['$']['k'] && tag['$']['k'] === "building" && tag['$']['v'] === "yes" ){
+											stats.wayBuildings += 1;
+										}
+										if(tag['$'] && tag['$']['k'] && tag['$']['k'] === "amenity"){
+											if(!stats[`amenity_${tag['$']['v']}`]){
+												stats[`amenity_${tag['$']['v']}`] = 1;
+											}else{
+												stats[`amenity_${tag['$']['v']}`] += 1;
+											}
+										}
+									})
+
 								}
 							})
 						}

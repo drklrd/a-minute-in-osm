@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
@@ -23,10 +22,27 @@ class App extends Component {
       });
   }
 
+  getAmenities(stats){
+    const amenities = Object.keys(stats).filter((stat)=>{
+      return stat.includes("amenity_");
+    }).reduce((obj,value)=>{
+      obj[value.split("amenity_")[1]] = stats[value];
+      return obj;
+    },{});
+    const amenitiesTemplate = (Object.keys(amenities).map((amenity,index)=>{
+      return(
+          <div key={index}>
+            {amenity} => {amenities[amenity]}
+          </div>
+      )
+    }))
+    return amenitiesTemplate;
+  }
+
   render() {
     return (
       <div className="App">
-        <h1>What happened in the last one hour in OpenStreetMap?</h1>
+        <h1>What happened in the last* one hour in OpenStreetMap?</h1>
         {
           this.state.stats && this.state.stats.users && 
           <div className="prose">
@@ -34,30 +50,30 @@ class App extends Component {
             <br/>
             creating {this.state.stats.changesets.length} changesets where;
             <br/>
-            {this.state.stats.deletenode} nodes were deleted,
+            {this.state.stats.wayBuildings} buildings** were created,
             <br/>
-            {this.state.stats.createnode} nodes were created,
+            <div className="elements">
+              {this.state.stats.deletenode} nodes were deleted, {this.state.stats.createnode} were created and {this.state.stats.modifynode} were modified.
+              <br/>
+              Similary, {this.state.stats.deleteway} ways were deleted, {this.state.stats.createway} were created and {this.state.stats.modifyway} were modified.
+              <br/>
+              As for the relations, {this.state.stats.deleterelation} of them were deleted, {this.state.stats.createrelation} were created and {this.state.stats.modifyrelation} were modified.
+            </div>
+            <hr/>
+            Also, certain number of amenities*** were created with the following tags
             <br/>
-            and {this.state.stats.modifynode} nodes were modified.
+            <div className="amenities">
+              {this.getAmenities(this.state.stats)}
+            </div>
             <br/>
-            Similary, {this.state.stats.deleteway} ways were deleted,
+            <span className="timeStamp"> *As of {this.state.stats.timeStamp} </span>
             <br/>
-            {this.state.stats.createway} ways were created,
+            <span className="remarks"> **way with tag building=yes</span>
             <br/>
-            and {this.state.stats.modifyway} ways were modified.
-            <br/>
-            As for the relations, {this.state.stats.deleterelation} of them were deleted,
-            <br/>
-            {this.state.stats.createrelation} relations were created,
-            <br/>
-            and {this.state.stats.modifyrelation} relations were modified.
-            <br/>
-            <span className="timeStamp"> As of {this.state.stats.timeStamp} </span>
+            <span className="remarks"> ***way with tag amenity=... </span>
             <br/>
           </div>
-
         }
-        
       </div>
     );
   }
