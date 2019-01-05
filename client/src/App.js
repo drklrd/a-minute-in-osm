@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import moment from "moment";
 
 class App extends Component {
 
@@ -75,7 +76,7 @@ class App extends Component {
               </div>
             } 
             <br/>
-            <span className="timeStamp"> *considering one minute before {this.state.stats.timeStamp} </span>
+            <span className="timeStamp"> *considering one minute before {moment(this.state.stats.createdDate).format("HH:mm MMM DD, YYYY ")} </span>
             <br/>
             <span className="remarks"> **way with tag building=yes</span>
             

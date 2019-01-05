@@ -159,7 +159,8 @@ module.exports = new CronJob(cronScheduledAt, ()=> {
 				}
 			})
 		})
-		console.log(stats)
+		stats["createdDate"] = new Date();
+		console.log(stats);
 		return writeStatFile(stats);
 	})
 	.then((res)=>{
