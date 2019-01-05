@@ -74,7 +74,7 @@ function writeStatFile(stats){
 	})
 }
 
-const granularity = "hour";
+const granularity = "minute";
 const url = `https://planet.openstreetmap.org/replication/${granularity}/state.txt`;
 let unzippedFileName;
 let stats = {
@@ -86,7 +86,7 @@ let stats = {
 
 const CronJob = require("cron").CronJob;
 
-const cronScheduledAt = "0 */59 * * * *"; // Run cron at every 59 minutes
+const cronScheduledAt = "0 */5 * * * *"; // Run cron at every 5 minutes
 
 module.exports = new CronJob(cronScheduledAt, ()=> {
 	console.log("New Job started at ",new Date());
@@ -150,6 +150,14 @@ module.exports = new CronJob(cronScheduledAt, ()=> {
 					}
 				});
 			}
+		})
+		const elements = ['node','way','relation'];
+		countOn.forEach((count)=>{
+			elements.forEach((element)=>{
+				if(!stats[`${count}${element}`]){
+					stats[`${count}${element}`] = 0;
+				}
+			})
 		})
 		console.log(stats)
 		return writeStatFile(stats);

@@ -36,13 +36,16 @@ class App extends Component {
           </div>
       )
     }))
-    return amenitiesTemplate;
+    return {
+      amenities,
+      amenitiesTemplate
+    };
   }
 
   render() {
     return (
       <div className="App">
-        <h1>What happened in the last* one hour in OpenStreetMap?</h1>
+        <h1>a minute* in OpenStreetMap</h1>
         {
           this.state.stats && this.state.stats.users && 
           <div className="prose">
@@ -60,17 +63,22 @@ class App extends Component {
               As for the relations, {this.state.stats.deleterelation} of them were deleted, {this.state.stats.createrelation} were created and {this.state.stats.modifyrelation} were modified.
             </div>
             <hr/>
-            Also, certain number of amenities*** were created with the following tags
+            {this.getAmenities(this.state.stats).amenities.length &&
+              <div>
+                Also, certain number of amenities*** were created with the following tags
+                <br/>
+                <div className="amenities">
+                  {this.getAmenities(this.state.stats).amenitiesTemplate}
+                </div>
+                <br/>
+                <span className="remarks"> ***way with tag amenity=... </span>
+              </div>
+            } 
             <br/>
-            <div className="amenities">
-              {this.getAmenities(this.state.stats)}
-            </div>
-            <br/>
-            <span className="timeStamp"> *As of {this.state.stats.timeStamp} </span>
+            <span className="timeStamp"> *considering one minute before {this.state.stats.timeStamp} </span>
             <br/>
             <span className="remarks"> **way with tag building=yes</span>
-            <br/>
-            <span className="remarks"> ***way with tag amenity=... </span>
+            
             <br/>
           </div>
         }

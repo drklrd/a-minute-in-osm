@@ -1,4 +1,5 @@
 const express = require("express");
+const fs = require("fs");
 const app = express();
 
 const cronJob = require("./script");
@@ -19,7 +20,7 @@ app.use(function(req, res, next) {
 
 
 app.get("/api/stats/hour", (req, res, next) => {
- const stats = require("./stats.json");
+ const stats = JSON.parse(fs.readFileSync(`./stats.json`, "utf8"));
  res.json({
  	success : 1,
  	stats
