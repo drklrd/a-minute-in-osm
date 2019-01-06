@@ -2,12 +2,12 @@ const express = require("express");
 const fs = require("fs");
 const app = express();
 
-const cronJob = require("./script");
-const useCronJob = true;
-if(!cronJob.running && useCronJob){
-	cronJob.start(); //start cron job
-	cronJob.fireOnTick();
-}
+// const cronJob = require("./script");
+// const useCronJob = true;
+// if(!cronJob.running && useCronJob){
+// 	cronJob.start(); //start cron job
+// 	cronJob.fireOnTick();
+// }
 
 app.use(express.static('client/build'));
 
@@ -26,6 +26,13 @@ app.get("/api/stats/hour", (req, res, next) => {
  	stats
  });
 });
+
+app.get("/api/keepalive", (req, res, next) => {
+ res.json({
+ 	success : 1,
+ });
+});
+
 
 app.listen((process.env.PORT || 8080), () => {
  console.log("Server running on port 3000");
