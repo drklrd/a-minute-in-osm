@@ -51,7 +51,7 @@ class App extends Component {
         {
           this.state.stats && this.state.stats.users && 
           <div className="prose">
-            <span className="timeStamp"> <strong>*</strong>considering one minute time period between {moment(this.state.stats.createdDate).add('-1','minutes').format("HH:mm")} to {moment(this.state.stats.createdDate).format("HH:mm")} {moment(this.state.stats.createdDate).format("MMM DD, YYYY ")} </span>
+            <span className="timeStamp"> <strong>*</strong>considering a minute between {moment(this.state.stats.createdDate).add('-1','minutes').format("HH:mm")} to {moment(this.state.stats.createdDate).format("HH:mm")} {moment(this.state.stats.createdDate).format("MMM DD, YYYY ")} </span>
             <br/>
             <span className="remarks"> <strong>**</strong>way with tag building=yes</span>
             <br/>
