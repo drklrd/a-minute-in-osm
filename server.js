@@ -2,12 +2,12 @@ const express = require("express");
 const fs = require("fs");
 const app = express();
 
-// const cronJob = require("./script");
-// const useCronJob = true;
-// if(!cronJob.running && useCronJob){
-// 	cronJob.start(); //start cron job
-// 	cronJob.fireOnTick();
-// }
+const cronJob = require("./script");
+const useCronJob = true;
+if(!cronJob.running && useCronJob){
+	cronJob.start(); //start cron job
+	cronJob.fireOnTick();
+}
 
 app.use(express.static('client/build'));
 
