@@ -4,21 +4,24 @@
 }
 
 .prose{
-  font-style: italic;
-  word-spacing: 3px;
-  font-size: 20px;
+  font-size: 25px;
 }
 
 .timeStamp{
   font-size: 11px;
-  margin-left: 290px;
+  /*margin-left: 290px;*/
 }
 
 .remarks{
   font-size: 11px;
-  margin-left: 290px;
+  /*margin-left: 290px;*/
 }
 
 .amenities{
   margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.timeline{
+  width: 30% !important;
 }

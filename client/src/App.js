@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import moment from "moment";
+import {Timeline, TimelineEvent} from 'react-event-timeline';
 
 class App extends Component {
 
@@ -12,7 +13,7 @@ class App extends Component {
   }
 
   componentDidMount(){
-    fetch('/api/stats/hour')
+    fetch("/api/stats/hour")
       .then((response) => {
         return response.json();
       })
@@ -32,9 +33,9 @@ class App extends Component {
     },{});
     const amenitiesTemplate = (Object.keys(amenities).map((amenity,index)=>{
       return(
-          <div key={index}>
-            {amenity} => {amenities[amenity]}
-          </div>
+        <TimelineEvent title={amenity} key={index} icon={<i className="material-icons md-18">fiber_manual_record</i>}>
+              {amenities[amenity]} of them were created
+          </TimelineEvent>
       )
     }))
     return {
@@ -46,40 +47,52 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <h1>a minute* in OpenStreetMap</h1>
+        <h1>a minute<strong>*</strong> in OpenStreetMap</h1>
         {
           this.state.stats && this.state.stats.users && 
           <div className="prose">
-            {this.state.stats.users.length} people contributed in-
+            <span className="timeStamp"> <strong>*</strong>considering one minute time period between {moment(this.state.stats.createdDate).add('-1','minutes').format("HH:mm")} to {moment(this.state.stats.createdDate).format("HH:mm")} {moment(this.state.stats.createdDate).format("MMM DD, YYYY ")} </span>
             <br/>
-            creating {this.state.stats.changesets.length} changesets where;
+            <span className="remarks"> <strong>**</strong>way with tag building=yes</span>
             <br/>
-            {this.state.stats.wayBuildings} buildings** were created,
-            <br/>
-            <div className="elements">
-              {this.state.stats.deletenode} nodes were deleted, {this.state.stats.createnode} were created and {this.state.stats.modifynode} were modified.
-              <br/>
-              Similary, {this.state.stats.deleteway} ways were deleted, {this.state.stats.createway} were created and {this.state.stats.modifyway} were modified.
-              <br/>
-              As for the relations, {this.state.stats.deleterelation} of them were deleted, {this.state.stats.createrelation} were created and {this.state.stats.modifyrelation} were modified.
+            <span className="remarks"> <strong>***</strong>way with tag amenity=... </span>
+            <div>
+              <Timeline className="timeline">
+                      <TimelineEvent icon={<i className="material-icons md-18">timer</i>}>
+                          Within this one minute
+                      </TimelineEvent>
+                      <TimelineEvent icon={<i className="material-icons md-18">people</i>}>
+                          {this.state.stats.users.length} people contributed in
+                      </TimelineEvent>
+                      <TimelineEvent icon={<i className="material-icons md-18">edit_location</i>}>
+                          {this.state.stats.changesets.length} changesets where
+                      </TimelineEvent>
+                      <TimelineEvent icon={<i className="material-icons md-18">place</i>}>
+                          {this.state.stats.createnode} nodes were created, {this.state.stats.modifynode} were modified, {this.state.stats.deletenode} were deleted
+                      </TimelineEvent>
+                      <TimelineEvent icon={<i className="material-icons md-18">trending_up</i>}>
+                          {this.state.stats.createway} ways were created, {this.state.stats.modifyway} were modified, {this.state.stats.deleteway} were deleted
+                      </TimelineEvent>
+                      <TimelineEvent icon={<i className="material-icons md-18">device_hub</i>}>
+                          {this.state.stats.createrelation} relations were created, {this.state.stats.modifyrelation} were modified, {this.state.stats.deleterelation} were deleted
+                      </TimelineEvent>
+                      <TimelineEvent icon={<i className="material-icons md-18">home</i>}>
+                          This includes creation of {this.state.stats.wayBuildings} buildings<strong>**</strong>
+                      </TimelineEvent>
+              </Timeline>
             </div>
-            <hr/>
-            {this.getAmenities(this.state.stats).amenities.length &&
+            <br/>
+            {Object.keys(this.getAmenities(this.state.stats).amenities).length>0 &&
               <div>
-                Also, certain number of amenities*** were created with the following tags
-                <br/>
+                Also, this includes creation of following amenities<strong>***</strong>
                 <div className="amenities">
-                  {this.getAmenities(this.state.stats).amenitiesTemplate}
+                  <br/>
+                  <Timeline className="timeline">
+                    {this.getAmenities(this.state.stats).amenitiesTemplate}
+                  </Timeline>
                 </div>
-                <br/>
-                <span className="remarks"> ***way with tag amenity=... </span>
               </div>
             } 
-            <br/>
-            <span className="timeStamp"> *considering one minute before {moment(this.state.stats.createdDate).format("HH:mm MMM DD, YYYY ")} </span>
-            <br/>
-            <span className="remarks"> **way with tag building=yes</span>
-            
             <br/>
           </div>
         }
