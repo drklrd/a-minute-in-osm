@@ -105,6 +105,7 @@ module.exports = new CronJob(cronScheduledAt, ()=> {
 	    return Download(minuteUrl);
 	})
 	.then((response)=>{
+		stats["createdDate"] = new Date();
 		return ExecCommand(`gunzip -k ${fileName}`);
 	})
 	.then((response)=>{
@@ -159,7 +160,6 @@ module.exports = new CronJob(cronScheduledAt, ()=> {
 				}
 			})
 		})
-		stats["createdDate"] = new Date();
 		console.log(stats);
 		return writeStatFile(stats);
 	})
