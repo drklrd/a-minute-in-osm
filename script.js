@@ -4,6 +4,7 @@ const fs = require("fs");
 const xml2js = require("xml2js");
 const parser = new xml2js.Parser();
 const request = require("request");
+const moment = require("moment");
 
 function ClearDir(){
 	return new Promise((resolve,reject)=>{
@@ -105,7 +106,10 @@ module.exports = new CronJob(cronScheduledAt, ()=> {
 	    return Download(minuteUrl);
 	})
 	.then((response)=>{
-		stats["createdDate"] = new Date();
+		// stats["createdDate"] = new Date();
+		let splits = stats.timeStamp.split(" ");
+		stats.createdDate = moment.utc(`${splits[5]} ${splits[1]} ${splits[2]} ${splits[3]}`).local();
+		stats.validate = true;
 		return ExecCommand(`gunzip -k ${fileName}`);
 	})
 	.then((response)=>{
