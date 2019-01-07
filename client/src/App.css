@@ -1,6 +1,9 @@
 .App {
-  margin-top:5%;
+  margin:5% auto;
+
+  max-width: 800px;
   text-align: center;
+  padding: 30px;
 }
 
 .prose{
@@ -14,6 +17,7 @@
 
 .remarks{
   font-size: 11px;
+  /* border: 1px solid red; */
   /*margin-left: 290px;*/
 }
 
@@ -23,5 +27,11 @@
 }
 
 .timeline{
-  width: 30% !important;
+  /* border: 1px solid red; */
+  /* width: 30% !important; */
+}
+
+.timeline-content {
+  margin-top: -10px;
+  margin-right: 20px;
 }

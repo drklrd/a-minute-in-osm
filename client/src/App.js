@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import moment from "moment";
+import 'flexboxgrid/dist/flexboxgrid.min.css'
 import {Timeline, TimelineEvent} from 'react-event-timeline';
 
 class App extends Component {
@@ -33,7 +34,7 @@ class App extends Component {
     },{});
     const amenitiesTemplate = (Object.keys(amenities).map((amenity,index)=>{
       return(
-        <TimelineEvent title={amenity} key={index} icon={<i className="material-icons md-18">fiber_manual_record</i>}>
+        <TimelineEvent className="timeline-content" title={amenity} key={index} icon={<i className="material-icons md-18">fiber_manual_record</i>}>
               {amenities[amenity]} of them were created
           </TimelineEvent>
       )
@@ -47,9 +48,12 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+      <div className="row">
+      <div className="col-md-12">
+
         <h1>a minute<strong>*</strong> in OpenStreetMap</h1>
         {
-          this.state.stats && this.state.stats.users && 
+          this.state.stats && this.state.stats.users &&
           <div className="prose">
             <span className="timeStamp"> <strong>*</strong>considering a minute between {moment(this.state.stats.createdDate).add('-1','minutes').format("HH:mm")} to {moment(this.state.stats.createdDate).format("HH:mm")} {moment(this.state.stats.createdDate).format("MMM DD, YYYY ")} </span>
             <br/>
@@ -58,25 +62,25 @@ class App extends Component {
             <span className="remarks"> <strong>***</strong>way with tag amenity=... </span>
             <div>
               <Timeline className="timeline">
-                      <TimelineEvent icon={<i className="material-icons md-18">timer</i>}>
+                      <TimelineEvent className="timeline-content" icon={<i className="material-icons md-18">timer</i>}>
                           Within this one minute
                       </TimelineEvent>
-                      <TimelineEvent icon={<i className="material-icons md-18">people</i>}>
-                          {this.state.stats.users.length} people contributed in
+                      <TimelineEvent className="timeline-content" icon={<i className="material-icons md-18">people</i>}>
+                          {this.state.stats.users.length} people have contributed to <a href="http://osm.org" target="_blank" rel="noopener noreferrer">OSM</a>
                       </TimelineEvent>
-                      <TimelineEvent icon={<i className="material-icons md-18">edit_location</i>}>
-                          {this.state.stats.changesets.length} changesets where
+                      <TimelineEvent className="timeline-content" icon={<i className="material-icons md-18">edit_location</i>}>
+                          {this.state.stats.changesets.length} changesets were made
                       </TimelineEvent>
-                      <TimelineEvent icon={<i className="material-icons md-18">place</i>}>
+                      <TimelineEvent className="timeline-content" icon={<i className="material-icons md-18">place</i>}>
                           {this.state.stats.createnode} nodes were created, {this.state.stats.modifynode} were modified, {this.state.stats.deletenode} were deleted
                       </TimelineEvent>
-                      <TimelineEvent icon={<i className="material-icons md-18">trending_up</i>}>
+                      <TimelineEvent className="timeline-content" icon={<i className="material-icons md-18">trending_up</i>}>
                           {this.state.stats.createway} ways were created, {this.state.stats.modifyway} were modified, {this.state.stats.deleteway} were deleted
                       </TimelineEvent>
-                      <TimelineEvent icon={<i className="material-icons md-18">device_hub</i>}>
+                      <TimelineEvent className="timeline-content" icon={<i className="material-icons md-18">device_hub</i>}>
                           {this.state.stats.createrelation} relations were created, {this.state.stats.modifyrelation} were modified, {this.state.stats.deleterelation} were deleted
                       </TimelineEvent>
-                      <TimelineEvent icon={<i className="material-icons md-18">home</i>}>
+                      <TimelineEvent className="timeline-content" icon={<i className="material-icons md-18">home</i>}>
                           This includes creation of {this.state.stats.wayBuildings} buildings<strong>**</strong>
                       </TimelineEvent>
               </Timeline>
@@ -92,10 +96,12 @@ class App extends Component {
                   </Timeline>
                 </div>
               </div>
-            } 
+            }
             <br/>
           </div>
         }
+        </div>
+        </div>
       </div>
     );
   }
