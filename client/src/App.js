@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
-import './App.css';
+import MDSpinner from "react-md-spinner";
 import moment from "moment";
-import 'flexboxgrid/dist/flexboxgrid.min.css'
 import {Timeline, TimelineEvent} from 'react-event-timeline';
+
+import 'flexboxgrid/dist/flexboxgrid.min.css'
+import './App.css';
 
 class App extends Component {
 
   constructor(props){
     super(props);
     this.state = {
-      stats : {}
+      stats : {},
+      initialized : false
     };
   }
 
@@ -20,7 +23,8 @@ class App extends Component {
       })
       .then((response) => {
         this.setState({
-          stats : response.stats
+          stats : response.stats,
+          initialized : true
         })
       });
   }
@@ -52,6 +56,10 @@ class App extends Component {
       <div className="col-md-12">
 
         <h1>a minute<strong>*</strong> in OpenStreetMap</h1>
+        {
+          !this.state.initialized &&
+          <MDSpinner singleColor="#00b894"/>
+        }
         {
           this.state.stats && this.state.stats.users &&
           <div className="prose">
