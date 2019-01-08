@@ -6,7 +6,7 @@ const cronJob = require("./script");
 const useCronJob = true;
 if(!cronJob.running && useCronJob){
 	cronJob.start(); //start cron job
-	// cronJob.fireOnTick();
+	cronJob.fireOnTick();
 }
 
 app.use(express.static('client/build'));
