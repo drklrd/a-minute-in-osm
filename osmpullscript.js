@@ -78,14 +78,14 @@ function writeStatFile(stats){
 const granularity = "minute";
 const url = `https://planet.openstreetmap.org/replication/${granularity}/state.txt`;
 let unzippedFileName;
-let stats = {
-	users : [],
-	changesets : [],
-	wayBuildings : 0
-};
 
 module.exports = {
 	pull : ()=>{
+		let stats = {
+			users : [],
+			changesets : [],
+			wayBuildings : 0
+		};
 		return ClearDir()
 		.then((cleared)=>{
 			return Request(url);
