@@ -161,6 +161,7 @@ module.exports = {
 				})
 			})
 			console.log(stats);
+			stats.unzippedFileName = unzippedFileName;
 			return writeStatFile(stats);
 		})
 		.then((res)=>{
