@@ -84,9 +84,7 @@ let stats = {
 	wayBuildings : 0
 };
 
-
 const CronJob = require("cron").CronJob;
-
 const cronScheduledAt = "0 */5 * * * *"; // Run cron at every 5 minutes
 
 module.exports = new CronJob(cronScheduledAt, ()=> {
@@ -96,7 +94,10 @@ module.exports = new CronJob(cronScheduledAt, ()=> {
 		return Request(url);
 	})
 	.then((response)=>{
-		stats.timeStamp = response.split("=")[0].split("\n")[0].split("#")[1];
+		let timesplits = response.split("=")[6].split(":").map((e)=>{
+			return e.replace(/[^a-zA-Z0-9--]/g,'');
+		})
+		stats.timeStamp = `${timesplits[0]}:${timesplits[1]}:${timesplits[2]}`;
 		const sequenceNumber = response.split("=")[1].split("\n")[0];
 		const paddedString = padString(sequenceNumber);
 		fileName = `${paddedString.substring(6,9)}.osc.gz`;
@@ -106,10 +107,8 @@ module.exports = new CronJob(cronScheduledAt, ()=> {
 	    return Download(minuteUrl);
 	})
 	.then((response)=>{
-		// stats["createdDate"] = new Date();
-		let splits = stats.timeStamp.split(" ");
-		stats.createdDate = moment.utc(`${splits[5]} ${splits[1]} ${splits[2]} ${splits[3]}`).local();
-		stats.validate = true;
+		stats.createdDate = moment.utc(stats.timeStamp).local();
+		stats.validatedTime = true;
 		return ExecCommand(`gunzip -k ${fileName}`);
 	})
 	.then((response)=>{
