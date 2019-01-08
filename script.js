@@ -78,17 +78,18 @@ function writeStatFile(stats){
 const granularity = "minute";
 const url = `https://planet.openstreetmap.org/replication/${granularity}/state.txt`;
 let unzippedFileName;
-let stats = {
-	users : [],
-	changesets : [],
-	wayBuildings : 0
-};
+
 
 const CronJob = require("cron").CronJob;
 const cronScheduledAt = "0 */5 * * * *"; // Run cron at every 5 minutes
 
 module.exports = new CronJob(cronScheduledAt, ()=> {
 	console.log("New Job started at ",new Date());
+	let stats = {
+		users : [],
+		changesets : [],
+		wayBuildings : 0
+	};
 	ClearDir()
 	.then((cleared)=>{
 		return Request(url);

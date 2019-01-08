@@ -17,7 +17,7 @@ class App extends Component {
   }
 
   componentDidMount(){
-    fetch("/api/stats/hour")
+    fetch("http://localhost:8080/api/stats/hour")
       .then((response) => {
         return response.json();
       })
@@ -63,6 +63,8 @@ class App extends Component {
         {
           this.state.stats && this.state.stats.users &&
           <div className="prose">
+            <span className="remarks"> OSM minutely planet diff used for this time duration can be found <a href={this.state.stats.planetFileLink}> here </a></span>
+            <br/>
             <span className="timeStamp"> <strong>*</strong>considering a minute between {moment(this.state.stats.createdDate).add('-1','minutes').format("HH:mm")} to {moment(this.state.stats.createdDate).format("HH:mm")} {moment(this.state.stats.createdDate).format("MMM DD, YYYY ")} </span>
             <br/>
             <span className="remarks"> <strong>**</strong>way with tag building=yes</span>

@@ -40,7 +40,7 @@ function Request(url) {
 				url: url
 			},
 			function(error, response, body) {
-				if (error) return reject(err);
+				if (error) return reject(error);
 				return resolve((response.body));
 			}
 		);
@@ -77,6 +77,7 @@ function writeStatFile(stats){
 
 const granularity = "minute";
 const url = `https://planet.openstreetmap.org/replication/${granularity}/state.txt`;
+let planetFileLink;
 let unzippedFileName;
 
 module.exports = {
@@ -100,6 +101,7 @@ module.exports = {
 			fileName = `${paddedString.substring(6,9)}.osc.gz`;
 			unzippedFileName = `${paddedString.substring(6,9)}.osc`;
 			const minuteUrl = `https://planet.openstreetmap.org/replication/${granularity}/${paddedString.substring(0,3)}/${paddedString.substring(3,6)}/${paddedString.substring(6,9)}.osc.gz`;
+			planetFileLink = minuteUrl;
 			console.log(minuteUrl)
 		    return Download(minuteUrl);
 		})
@@ -160,8 +162,9 @@ module.exports = {
 					}
 				})
 			})
-			console.log(stats);
 			stats.unzippedFileName = unzippedFileName;
+			stats.planetFileLink = planetFileLink;
+			console.log(stats);
 			return writeStatFile(stats);
 		})
 		.then((res)=>{
